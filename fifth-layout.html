@@ -296,12 +296,12 @@ impl&lt;T&gt; List&lt;T&gt; {
             Some(old_tail) =&gt; {
                 // If the old tail existed, update it to point to the new tail
                 old_tail.next = Some(new_tail);
-                old_tail.next.as_mut().map(|node| &amp;mut **node)
+                old_tail.next.as_deref_mut()
             }
             None =&gt; {
                 // Otherwise, update the head to point to it
                 self.head = Some(new_tail);
-                self.head.as_mut().map(|node| &amp;mut **node)
+                self.head.as_deref_mut()
             }
         };
 
@@ -352,12 +352,12 @@ impl&lt;'a, T&gt; List&lt;'a, T&gt; {
             Some(old_tail) =&gt; {
                 // If the old tail existed, update it to point to the new tail
                 old_tail.next = Some(new_tail);
-                old_tail.next.as_mut().map(|node| &amp;mut **node)
+                old_tail.next.as_deref_mut()
             }
             None =&gt; {
                 // Otherwise, update the head to point to it
                 self.head = Some(new_tail);
-                self.head.as_mut().map(|node| &amp;mut **node)
+                self.head.as_deref_mut()
             }
         };
 
@@ -370,8 +370,8 @@ impl&lt;'a, T&gt; List&lt;'a, T&gt; {
 error[E0495]: cannot infer an appropriate lifetime for autoref due to conflicting requirements
   --&gt; src/fifth.rs:35:27
    |
-35 |                 self.head.as_mut().map(|node| &amp;mut **node)
-   |                           ^^^^^^
+35 |                 self.head.as_deref_mut()
+   |                           ^^^^^^^^^^^^
    |
 note: first, the lifetime cannot outlive the anonymous lifetime #1 defined on the method body at 18:5...
   --&gt; src/fifth.rs:18:5
@@ -387,7 +387,7 @@ note: first, the lifetime cannot outlive the anonymous lifetime #1 defined on th
 note: ...so that reference does not outlive borrowed content
   --&gt; src/fifth.rs:35:17
    |
-35 |                 self.head.as_mut().map(|node| &amp;mut **node)
+35 |                 self.head.as_deref_mut()
    |                 ^^^^^^^^^
 note: but, the lifetime must be valid for the lifetime 'a as defined on the impl at 13:6...
   --&gt; src/fifth.rs:13:6

@@ -221,11 +221,11 @@ impl&lt;T&gt; List&lt;T&gt; {
     }
 
     pub fn iter(&amp;self) -&gt; Iter&lt;'_, T&gt; {
-        Iter { next: self.head.as_ref().map(|node| &amp;**node) }
+        Iter { next: self.head.as_deref() }
     }
 
     pub fn iter_mut(&amp;mut self) -&gt; IterMut&lt;'_, T&gt; {
-        IterMut { next: self.head.as_mut().map(|node| &amp;mut **node) }
+        IterMut { next: self.head.as_deref_mut() }
     }
 }
 
@@ -260,7 +260,7 @@ impl&lt;'a, T&gt; Iterator for Iter&lt;'a, T&gt; {
 
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
         self.next.map(|node| {
-            self.next = node.next.as_ref().map(|node| &amp;**node);
+            self.next = node.next.as_deref();
             &amp;node.elem
         })
     }
@@ -271,7 +271,7 @@ impl&lt;'a, T&gt; Iterator for IterMut&lt;'a, T&gt; {
 
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
         self.next.take().map(|node| {
-            self.next = node.next.as_mut().map(|node| &amp;mut **node);
+            self.next = node.next.as_deref_mut();
             &amp;mut node.elem
         })
     }

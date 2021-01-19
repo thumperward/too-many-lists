@@ -189,7 +189,7 @@ IterMut can actually be implemented for many structures completely safely!</p>
 
 impl&lt;T&gt; List&lt;T&gt; {
     pub fn iter_mut(&amp;self) -&gt; IterMut&lt;'_, T&gt; {
-        IterMut { next: self.head.as_mut().map(|node| &amp;mut **node) }
+        IterMut { next: self.head.as_deref_mut() }
     }
 }
 
@@ -198,7 +198,7 @@ impl&lt;'a, T&gt; Iterator for IterMut&lt;'a, T&gt; {
 
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
         self.next.map(|node| {
-            self.next = node.next.as_mut().map(|node| &amp;mut **node);
+            self.next = node.next.as_deref_mut();
             &amp;mut node.elem
         })
     }
@@ -210,7 +210,7 @@ error[E0596]: cannot borrow `self.head` as mutable, as it is behind a `&amp;` re
    |
 94 |     pub fn iter_mut(&amp;self) -&gt; IterMut&lt;'_, T&gt; {
    |                     ----- help: consider changing this to be a mutable reference: `&amp;mut self`
-95 |         IterMut { next: self.head.as_mut().map(|node| &amp;mut **node) }
+95 |         IterMut { next: self.head.as_deref_mut() }
    |                         ^^^^^^^^^ `self` is a `&amp;` reference, so the data it refers to cannot be borrowed as mutable
 
 error[E0507]: cannot move out of borrowed content
@@ -223,7 +223,7 @@ error[E0507]: cannot move out of borrowed content
 though, it even tells us how to fix it! You can't upgrade a shared reference to a mutable
 one, so <code>iter_mut</code> needs to take <code>&amp;mut self</code>. Just a silly copy-paste error.</p>
 <pre><code class="language-rust ignore">pub fn iter_mut(&amp;mut self) -&gt; IterMut&lt;'_, T&gt; {
-    IterMut { next: self.head.as_mut().map(|node| &amp;mut **node) }
+    IterMut { next: self.head.as_deref_mut() }
 }
 </code></pre>
 <p>What about the other one?</p>
@@ -251,7 +251,7 @@ location in memory, which is forbidden). Instead, we should properly <code>take<
 the Option to get it.</p>
 <pre><code class="language-rust ignore">fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
     self.next.take().map(|node| {
-        self.next = node.next.as_mut().map(|node| &amp;mut **node);
+        self.next = node.next.as_deref_mut();
         &amp;mut node.elem
     })
 }
