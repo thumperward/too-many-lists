@@ -15,8 +15,8 @@ Which reads approximately as "A List is either Empty or an Element followed by a
 List". This is a recursive definition expressed as a *sum type*, which is a
 fancy name for "a type that can have different values which may be different
 types". Rust calls sum types `enum`s! If you're coming from a C-like language,
-this is exactly the enum you know and love, but on meth. So let's transcribe
-this functional definition into Rust!
+this is exactly the enum you know and love, but in overdrive. So let's
+transcribe this functional definition into Rust!
 
 For now we'll avoid generics to keep things simple. We'll only support
 storing signed 32-bit integers:
@@ -137,8 +137,8 @@ Consider a list with two elements:
 
 There are two key issues:
 
-* We're allocating a node that just says "I'm not actually a Node"
-* One of our nodes isn't heap-allocated at all.
+*   We're allocating a node that just says "I'm not actually a Node"
+*   One of our nodes isn't heap-allocated at all.
 
 On the surface, these two seem to cancel each-other out. We allocate an
 extra node, but one of our nodes doesn't need to be allocated at all.
@@ -284,9 +284,9 @@ pub enum List {
 
 Let's check our priorities:
 
-* Tail of a list never allocates extra junk: check!
-* `enum` is in delicious null-pointer-optimized form: check!
-* All elements are uniformly allocated: check!
+*   Tail of a list never allocates extra junk: check!
+*   `enum` is in delicious null-pointer-optimized form: check!
+*   All elements are uniformly allocated: check!
 
 Alright! We actually just constructed exactly the layout that we used to
 demonstrate that our first layout (as suggested by the official Rust
@@ -314,7 +314,6 @@ an `enum` are totally public, and we're not allowed to publicly talk about
 private types. We could make all of `Node` totally public, but generally in Rust
 we favour keeping implementation details private. Let's make `List` a struct, so
 that we can hide the implementation details:
-
 
 ```rust ,ignore
 pub struct List {
