@@ -137,8 +137,8 @@ Consider a list with two elements:
 
 There are two key issues:
 
-*   We're allocating a node that just says "I'm not actually a Node"
-*   One of our nodes isn't heap-allocated at all.
+* We're allocating a node that just says "I'm not actually a Node"
+* One of our nodes isn't heap-allocated at all.
 
 On the surface, these two seem to cancel each-other out. We allocate an
 extra node, but one of our nodes doesn't need to be allocated at all.
@@ -284,9 +284,9 @@ pub enum List {
 
 Let's check our priorities:
 
-*   Tail of a list never allocates extra junk: check!
-*   `enum` is in delicious null-pointer-optimized form: check!
-*   All elements are uniformly allocated: check!
+* Tail of a list never allocates extra junk: check!
+* `enum` is in delicious null-pointer-optimized form: check!
+* All elements are uniformly allocated: check!
 
 Alright! We actually just constructed exactly the layout that we used to
 demonstrate that our first layout (as suggested by the official Rust
